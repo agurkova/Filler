@@ -1,0 +1,32 @@
+- User Interface
+    - Beginning
+        - option to play '2 player'
+        - option to play against AI(maybe)
+    - Score tracker
+    - Hexagons
+        - Of varying colour
+    - Bar of colour choices
+        - clear distinction between non-available colours
+            - your colour and other player's colour
+    - Outline of team colour
+    - Ending
+        - Name of winner
+        - option to start again
+        - option to quit game
+
+- Game Logic
+    - generate the board
+        - same mirrored pattern but different colours
+    - assign position
+        - mirrored
+    - offer colours, excluding either teams' current colour
+    - repaint owned hex(s) and add surrounding hex(s) of same colour to the colony
+        - change total accordingly
+    - check total no. of hexs vs invaded hexs
+        - game over or next turn?
+
+- AI*
+    - algorithm that picks the colour with most hexs
+        - if same amount for two available colours then pick the one that stretches closest to the centre of map
+    - 'mini max'
+        - checks best possibilities of a number of turns ahead
