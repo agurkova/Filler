@@ -3,6 +3,10 @@ public class Hex {
     private Player team;
     private int colour;
 
+    public Hex(int colour) {
+        this.colour = colour;
+    }
+
     public Player getTeam() {
         return team;
     }
