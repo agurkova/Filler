@@ -23,6 +23,14 @@ public class Board {
 
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     @Override
     public String toString() {
         String stringArray = "";
