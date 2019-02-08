@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
@@ -44,5 +45,37 @@ public class Board {
             stringArray += "\n";
         }
         return stringArray;
+    }
+
+    public int colonise(Player player, int chosenColour) {
+        ArrayList<Position> workQueue = new ArrayList<>();
+        int score = 0;
+
+        Position startingPos = player.getStartingPosition();
+        Hex currentHex = getHex(startingPos);
+        currentHex.setTeam(player);
+        currentHex.setColour(chosenColour);
+        workQueue.add(startingPos);
+        score++;
+
+        while (!workQueue.isEmpty()) {
+            Position currentPos = workQueue.remove(0);
+            ArrayList<Position> neighbours = getNeighbours(currentPos);
+            for (Position curNeighbour : neighbours) {
+                Hex hex = getHex(curNeighbour);
+                if (hex.getTeam() == player ^ hex.getColour() == chosenColour) { // ^ exclusive or
+                    hex.setTeam(player);
+                    hex.setColour(chosenColour);
+                    workQueue.add(curNeighbour);
+                    score++;
+                }
+            }
+        }
+
+        return score;
+    }
+
+    private Hex getHex(Position position) {
+        return board[position.getRow()][position.getCol()];
     }
 }

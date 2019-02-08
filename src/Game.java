@@ -43,4 +43,19 @@ public class Game {
         filler.play();
         System.out.println(filler.board);
     }
+
+    public void turn(Player player) {
+        int[] availableColours = new int[5];
+
+        for (int colour = 0, i = 0; colour < 7; colour++) {
+            if (colour != players[0].getColour() && colour != players[1].getColour()) {
+                availableColours[i++] = colour;
+            }
+        }
+
+        int chosenColour = player.makeColourChoice(availableColours);
+        int score = board.colonise(player, chosenColour);
+        player.setColour(chosenColour);
+        player.setScore(score);
+    }
 }
