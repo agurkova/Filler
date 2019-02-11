@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Player {
+public abstract class Player {
 
     private Position startingPosition;
     private int colour;
@@ -22,9 +22,7 @@ public class Player {
         this.colour = colour;
     }
 
-    public int makeColourChoice(int[] availableColours) {
-        return availableColours[new Random().nextInt(5)];
-    }
+    public abstract int makeColourChoice(int[] availableColours);
 
     public int getScore() {
         return score;
@@ -32,5 +30,14 @@ public class Player {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "startingPosition=" + startingPosition +
+                ", colour=" + colour +
+                ", score=" + score +
+                '}';
     }
 }
