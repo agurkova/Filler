@@ -6,11 +6,18 @@ public class Game {
     private Player[] players;
     private UserInterface ui;
 
+//    public Game() {
+//        ui = new TextInterface();
+//        players = new Player[2];
+//        players[0] = new HumanPlayer(ui);
+//        players[1] = new HumanPlayer(ui);
+//    }
+
     public Game() {
-        ui = new TextInterface();
+        ui = new GraphicalInterface();
         players = new Player[2];
-        players[0] = new HumanPlayer(ui);
-        players[1] = new HumanPlayer(ui);
+        players[0] = new RandomPlayer();
+        players[1] = new RandomPlayer();
     }
 
     public void play() {
