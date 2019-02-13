@@ -72,6 +72,68 @@ public class Board {
             }
         }
 
+        boolean[][] visited = new boolean[height][width];
+        boolean[][] virusZone = new boolean[height][width]; //reachable by other player
+
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
+                if (visited[r][c]) { // visited array is automatically set to false
+                    continue;
+                }
+                Position curPos = new Position(r, c);
+                Hex curHex = getHex(curPos);
+
+                visited[r][c] = true;
+                if (curHex.getTeam() == player) {
+                    continue;
+                } else if (curHex.getTeam() != null){
+                    virusZone[r][c] = true;
+                    continue;
+                }
+
+                boolean vulnerable = false;
+                ArrayList<Position> investigatedBlob = new ArrayList<>();
+
+                investigatedBlob.add(curPos);
+                workQueue.add(curPos);
+                while (!workQueue.isEmpty()) {
+                    Position currentPos = workQueue.remove(0);
+                    ArrayList<Position> neighbours = getNeighbours(currentPos);
+
+                    for (Position curNeighbour : neighbours) {
+                        if (virusZone[curNeighbour.getRow()][curNeighbour.getCol()]) {
+                            vulnerable = true;
+                        }
+                        if (visited[curNeighbour.getRow()][curNeighbour.getCol()]) {
+                            continue;
+                        }
+
+                        Hex hex = getHex(curNeighbour);
+                        if (hex.getTeam() == null) {
+                            investigatedBlob.add(curNeighbour);
+                            workQueue.add(curNeighbour);
+                        } else if (hex.getTeam() != player) {
+                            virusZone[curNeighbour.getRow()][curNeighbour.getCol()] = true;
+                            vulnerable = true;
+                        }
+
+                        visited[curNeighbour.getRow()][curNeighbour.getCol()] = true;
+                    }
+                }
+
+                for (Position investigatedPos : investigatedBlob) {
+                    if (vulnerable) { //if it is true
+                        virusZone[investigatedPos.getRow()][investigatedPos.getCol()] = true;
+                    } else {
+                        Hex investigatedHex = getHex(investigatedPos);
+                        investigatedHex.setTeam(player);
+                        investigatedHex.setColour(chosenColour);
+                        score++;
+                    }
+                }
+            }
+        }
+
         return score;
     }
 
