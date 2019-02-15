@@ -1,18 +1,20 @@
 import java.util.Random;
 
+/**
+ * Controls the game flow and interacts with the players via a user interface
+ *
+ * @author (Alice Gurkova)
+ * @version (02/14/2019)
+ */
 public class Game {
 
     private Board board;
     private Player[] players;
     private UserInterface ui;
 
-//    public Game() {
-//        ui = new TextInterface();
-//        players = new Player[2];
-//        players[0] = new HumanPlayer(ui);
-//        players[1] = new HumanPlayer(ui);
-//    }
-
+    /**
+     * Creates a new Game and initialises the user interface
+     */
     public Game() {
         ui = new GraphicalInterface();
         players = new Player[2];
@@ -20,11 +22,27 @@ public class Game {
         players[1] = new RandomPlayer();
     }
 
-    public void play() {
-        generateBoard();
-        assignBeginningPositions();
-        ui.updatePlayerInfo(players);
-        ui.updateBoard(board);
+    /**
+     * Launches the game
+     * @param args Command line arguments (they are not used)
+     */
+    public static void main(String[] args) {
+        Game filler = new Game();
+        filler.play();
+    }
+
+    /**
+     * The main game loop
+     */
+    public void play()
+    {
+        boolean continuePlaying = true;
+        while (continuePlaying) {
+            choosePlayers();
+            generateBoard();
+            assignBeginningPositions();
+            ui.updatePlayerInfo(players);
+            ui.updateBoard(board);
 
         for (int i = 0; !isGameOver(); i++) {
             turn(players[i % 2]);
@@ -35,6 +53,9 @@ public class Game {
         announceWinner();
     }
 
+    /**
+     * Computes and announces the winner and loser
+     */
     private void announceWinner() {
         Player winner;
         Player loser;
@@ -50,10 +71,18 @@ public class Game {
         ui.announceWinner(winner, loser);
     }
 
+    /**
+     * Checks if all the Hexes have been colonised
+     * @return true if there are no more unclaimed Hexes
+     */
     private boolean isGameOver() {
         return (players[0].getScore() + players[1].getScore() == board.getHeight() * board.getWidth());
     }
 
+    /**
+     * Gives a random starting position to each player
+     * Performs 'the first turn' on their behalf
+     */
     private void assignBeginningPositions() {
         // should only place player in a range of 4 rows away from the wall closest to the player
         Random randomStartPos = new Random();
@@ -78,16 +107,18 @@ public class Game {
         players[1].setScore(score);
     }
 
+    /**
+     * Prepares the game board by asking for the size and generating it
+     */
     private void generateBoard() {
         board = new Board(6, 7, 7);
     }
 
-    public static void main(String[] args) {
-        Game filler = new Game();
-        filler.play();
-        System.out.println(filler.board);
-    }
-
+    /**
+     * Allows player to choose colour out of unused colours
+     * Executes the turn
+     * @param player the current player
+     */
     public void turn(Player player) {
         int[] availableColours = new int[5];
 
